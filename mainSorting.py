@@ -1,41 +1,42 @@
-#[4.8.2.6.0.5.2]
 
-#O(n2) Complexity
-def bbubleSort (inputList) :
-    #Traverse through all List elements
-    for i in range(0, len(inputList)):
-        #Last i elements are already in place (Greater than)
-        for j in range(1, len(inputList-i-1)):
-            #Replace elements if the element is greater
-            #than the next element
-            if inputList[i] > inputList[j]:
-                inputList[i], inputList[j] = inputList[j], inputList[i]
-    #return the sorted List
-    graphTime()
-    return inputList
+def quickSort(A, start, end):
+    #In-place quicksort.
 
-def selectionSort (inputList) :
-    for i in range(0, len(inputList)):
-        k = i
-        for j in range(i+1, len(inputList)):
-            if inputList[k] > inputList[j]:
-                k=j
+    if start >= end:
+        return
 
-#Additional
-def swap(A, i, j):
-    #Helper function to swap elements i and j of list A.
+    pivot = A[end]
+    pivotIdx = start
 
-    if i != j:
-        A[i], A[j] = A[j], A[i]
+    for i in range(start, end):
+        if A[i] < pivot:
+            swap(A, i, pivotIdx)
+            pivotIdx += 1
+        yield A
+    swap(A, end, pivotIdx)
+    yield A
 
-def insertionSort(A):
-    # In-place insertion sort.
-    for i in range(1, len(A)):
-        j = i
-        while j > 0 and A[j] < A[j - 1]:
-            swap(A, j, j - 1)
-            j -= 1
+    yield from quickSort(A, start, pivotIdx - 1)
+    yield from quickSort(A, pivotIdx + 1, end)
+
+def selectionsort(A):
+    #In-place selection sort.
+    if len(A) == 1:
+        return
+
+    for i in range(len(A)):
+        # Find minimum unsorted value.
+        minVal = A[i]
+        minIdx = i
+        for j in range(i, len(A)):
+            if A[j] < minVal:
+                minVal = A[j]
+                minIdx = j
             yield A
+        swap(A, i, minIdx)
+        yield A
+
+
 
 def mergeSort(A, start, end):
     #Merge sort.
@@ -76,42 +77,62 @@ def merge(A, start, mid, end):
         A[start + i] = sorted_val
         yield A
 
-def quickSort(A, start, end):
-    #In-place quicksort.
 
-    if start >= end:
-        return
+#[4.8.2.6.0.5.2]
+#O(n*n) Complexity
+def insertionSort (array) :
+    #Starts from the second element backwards
+    for i in range(1, len(array)) :
+        #Initialize the variable j thal will be Used
+        #in the while loop as a reference
+        j = i
+        #Conditional only array[j] < array[j - 1]
+        while j>0 and array[j] < array[j - 1]:
+            #Swap Additional method
+            swap(array,j,j-1)
+            j = j - 1
 
-    pivot = A[end]
-    pivotIdx = start
 
-    for i in range(start, end):
-        if A[i] < pivot:
-            swap(A, i, pivotIdx)
-            pivotIdx += 1
-        yield A
-    swap(A, end, pivotIdx)
-    yield A
+#[4.8.2.6.0.5.2]
+#O(n2) Complexity
+def bubbleSort (array):
+    #Traverse through all List elements
+    for i in range(0, len(array)):
+        #Last i elements are already in place (Greater than)
+        for j in range(1, len(array)-i):
+            #Replace elements if the element is greater
+            #than the next element
+            if array[j-1] > array[j]:
+                #Swap Additional method
+                swap(array, j, j-1)
+    #return the sorted List
+    #return inputList
 
-    yield from quickSort(A, start, pivotIdx - 1)
-    yield from quickSort(A, pivotIdx + 1, end)
+#Additional
+#Used in insertionSort and quickSort
+def swap(A, i, j):
+    #Helper function to swap elements i and j of list A.
+    if i != j:
+        A[i], A[j] = A[j], A[i]
 
-def selectionsort(A):
-    #In-place selection sort.
-    if len(A) == 1:
-        return
+if __name__ == "__main__":
+    # Get user input to determine range of integers (1 to N) and desired
+    # sorting method (algorithm).
+    # NIntegers = int(input("Enter number of integers: "))
+    # method_msg = "Enter sorting method:\n(b)ubble\n(i)nsertion\n(m)erge \
+    #     \n(q)uick\n(s)election\n"
+    # method = input(method_msg)
 
-    for i in range(len(A)):
-        # Find minimum unsorted value.
-        minVal = A[i]
-        minIdx = i
-        for j in range(i, len(A)):
-            if A[j] < minVal:
-                minVal = A[j]
-                minIdx = j
-            yield A
-        swap(A, i, minIdx)
-        yield A
+    #Dummy value
+    array = [10,22,223,12,12,15,6,2,16,64]
+    print ('Array unsorted value : ' + str(array))
+    insertionSort(array)
+    print ('insertionSort : '+ str(array))
+    bubbleSort(array)
+    print('bubbleSort : '+ str(array))
+
+
+
 
 #TODO: Verify list type for derive request
 # Check Complexity
@@ -121,13 +142,3 @@ def checkSorting():
 #TODO: Bokeh library to plot time Complex
 def graphTime():
     pass
-
-if __name__ == "__main__":
-    # Get user input to determine range of integers (1 to N) and desired
-    # sorting method (algorithm).
-    NIntegers = int(input("Enter number of integers: "))
-    method_msg = "Enter sorting method:\n(b)ubble\n(i)nsertion\n(m)erge \
-        \n(q)uick\n(s)election\n"
-    method = input(method_msg)
-
-
