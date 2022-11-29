@@ -1,7 +1,11 @@
+import time
+import random
+
+def apiMessagge() :
+    return 'Mensaje importado desde el archivo mainSorting'
 
 def quickSort(A, start, end):
     #In-place quicksort.
-
     if start >= end:
         return
 
@@ -18,25 +22,7 @@ def quickSort(A, start, end):
 
     yield from quickSort(A, start, pivotIdx - 1)
     yield from quickSort(A, pivotIdx + 1, end)
-
-def selectionsort(A):
-    #In-place selection sort.
-    if len(A) == 1:
-        return
-
-    for i in range(len(A)):
-        # Find minimum unsorted value.
-        minVal = A[i]
-        minIdx = i
-        for j in range(i, len(A)):
-            if A[j] < minVal:
-                minVal = A[j]
-                minIdx = j
-            yield A
-        swap(A, i, minIdx)
-        yield A
-
-
+    
 
 def mergeSort(A, start, end):
     #Merge sort.
@@ -75,6 +61,24 @@ def merge(A, start, mid, end):
 
     for i, sorted_val in enumerate(merged):
         A[start + i] = sorted_val
+        yield A
+
+#[4.8.2.6.0.5.2]
+def selectionsort(A):
+    #In-place selection sort.
+    if len(A) == 1:
+        return
+
+    for i in range(len(A)):
+        # Find minimum unsorted value.
+        minVal = A[i]
+        minIdx = i
+        for j in range(i, len(A)):
+            if A[j] < minVal:
+                minVal = A[j]
+                minIdx = j
+            yield A
+        swap(A, i, minIdx)
         yield A
 
 
@@ -124,21 +128,41 @@ if __name__ == "__main__":
     # method = input(method_msg)
 
     #Dummy value
-    array = [10,22,223,12,12,15,6,2,16,64]
+    old_array = [10,22,223,12,12,15,6,2,16,64]
+
+    array = [random.randint(0,1000) for i in range(5000)]
+
     print ('Array unsorted value : ' + str(array))
+
+    timeStartSort = time.time()
     insertionSort(array)
-    print ('insertionSort : '+ str(array))
+    timeEndSort = time.time()
+    executionTime= timeEndSort - timeStartSort
+    #print ('Insertion Sort : '+ str(array))
+    print("Elapsed time: %0.10f seconds." % executionTime)
+
+    timeStartSort = time.time()
     bubbleSort(array)
-    print('bubbleSort : '+ str(array))
+    timeEndSort = time.time()
+    executionTime= timeEndSort - timeStartSort
+    #print('Bubble Sort : '+ str(array))
+    print("Elapsed time: %0.10f seconds." % executionTime)
+
+    timeStartSort = time.time()
+    selectionsort(array)
+    timeEndSort = time.time()
+    executionTime= timeEndSort - timeStartSort
+    print('Selection Sort : '+ str(array))
+    print("Elapsed time: %0.30f seconds." % executionTime)
 
 
 
 
-#TODO: Verify list type for derive request
-# Check Complexity
-def checkSorting():
-    pass
+# #TODO: Verify list type for derive request
+# # Check Complexity
+# def checkSorting():
+#     pass
 
-#TODO: Bokeh library to plot time Complex
-def graphTime():
-    pass
+# #TODO: Bokeh library to plot time Complex
+# def graphTime():
+#     pass
